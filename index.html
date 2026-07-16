@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>简历 - 嵌入式软件工程师</title>
+<title>简历</title>
 <style>
   :root {
     --accent: #1f6feb;
@@ -13,20 +13,16 @@
     --line: #e4e8ee;
     --bg-soft: #f6f8fb;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
   body {
     font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Roboto, sans-serif;
     color: var(--ink);
     font-size: 13px;
     line-height: 1.7;
     background: #dfe3e8;
+    padding-top: 52px;
   }
-
-  /* A4 页面 */
   .page {
     width: 210mm;
     min-height: 297mm;
@@ -35,8 +31,7 @@
     background: #fff;
     box-shadow: 0 4px 24px rgba(0,0,0,.12);
   }
-
-  /* ===== 头部 ===== */
+  /* 头部 */
   .header {
     display: flex;
     justify-content: space-between;
@@ -45,493 +40,197 @@
     padding-bottom: 16px;
     border-bottom: 3px solid var(--accent);
   }
-  .header .name {
-    font-size: 30px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent-dark);
-  }
-  .header .role {
-    margin-top: 4px;
-    font-size: 14px;
-    color: var(--accent);
-    font-weight: 600;
-  }
-  .header .contact {
-    margin-top: 10px;
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.9;
-  }
+  .header .name { font-size: 30px; font-weight: 700; letter-spacing: 2px; color: var(--accent-dark); }
+  .header .role { margin-top: 4px; font-size: 14px; color: var(--accent); font-weight: 600; }
+  .header .contact { margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.9; }
   .header .contact span { display: inline-block; margin-right: 18px; white-space: nowrap; }
   .header .contact b { color: var(--ink); font-weight: 600; }
   .photo {
-    position: relative;
-    width: 90px;
-    height: 120px;
-    flex: 0 0 auto;
-    border: 1px solid var(--line);
-    border-radius: 4px;
+    position: relative; width: 90px; height: 120px; flex: 0 0 auto;
+    border: 1px solid var(--line); border-radius: 4px;
     background: var(--bg-soft) center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #aab2bd;
-    font-size: 12px;
-    text-align: center;
-    cursor: pointer;
-    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    color: #aab2bd; font-size: 12px; text-align: center; cursor: pointer; overflow: hidden;
   }
   .photo.has-img .photo-hint { display: none; }
   .photo:hover .photo-mask { opacity: 1; }
   .photo-mask {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,.45);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    opacity: 0;
-    transition: opacity .15s;
+    position: absolute; inset: 0; background: rgba(0,0,0,.45); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 12px;
+    opacity: 0; transition: opacity .15s;
   }
   @media print { .photo-mask { display: none; } .photo { cursor: default; } }
-
-  /* ===== 求职意向条 ===== */
-  .intent {
-    display: flex;
-    gap: 10px;
-    margin: 14px 0 4px;
-  }
+  /* 求职意向 */
+  .intent { display: flex; gap: 10px; margin: 14px 0 4px; }
   .intent .chip {
-    flex: 1;
-    background: var(--bg-soft);
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 12px;
-    border-left: 3px solid var(--accent);
+    flex: 1; background: var(--bg-soft); border-radius: 6px; padding: 8px 12px;
+    font-size: 12px; border-left: 3px solid var(--accent);
   }
   .intent .chip .k { color: var(--muted); }
   .intent .chip .v { color: var(--ink); font-weight: 600; }
-
-  /* ===== 区块标题 ===== */
+  /* 区块标题 */
   .section { margin-top: 18px; }
   .section-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--accent-dark);
-    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;
+    color: var(--accent-dark); margin-bottom: 10px;
   }
-  .section-title::before {
-    content: "";
-    width: 5px;
-    height: 16px;
-    background: var(--accent);
-    border-radius: 2px;
-  }
-  .section-title::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--line);
-  }
-
-  /* ===== 工作 / 项目 条目 ===== */
+  .section-title::before { content: ""; width: 5px; height: 16px; background: var(--accent); border-radius: 2px; }
+  .section-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  /* 工作 / 项目条目 */
   .item { margin-bottom: 14px; page-break-inside: avoid; }
   .item-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 4px 12px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 4px 12px;
   }
   .item-head .org { font-weight: 700; font-size: 13.5px; }
   .item-head .pos { color: var(--accent); font-weight: 600; }
   .item-head .date { color: var(--muted); font-size: 12px; white-space: nowrap; }
-  .tech {
-    margin: 5px 0;
-    font-size: 12px;
-    color: var(--muted);
-    background: var(--bg-soft);
-    padding: 5px 10px;
-    border-radius: 4px;
-  }
+  .tech { margin: 5px 0; font-size: 12px; color: var(--muted); background: var(--bg-soft); padding: 5px 10px; border-radius: 4px; }
   .tech b { color: var(--accent-dark); }
   .desc { margin-top: 5px; }
   .desc p { margin: 2px 0; color: var(--muted); }
   ul.duties { margin: 5px 0 0 18px; }
   ul.duties li { margin: 3px 0; color: var(--muted); }
-
-  /* ===== 技能列表 ===== */
+  /* 技能 */
   ul.skills { list-style: none; }
-  ul.skills li {
-    position: relative;
-    padding-left: 18px;
-    margin: 5px 0;
-    color: var(--muted);
-  }
-  ul.skills li::before {
-    content: "▹";
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-    font-weight: 700;
-  }
+  ul.skills li { position: relative; padding-left: 18px; margin: 5px 0; color: var(--muted); }
+  ul.skills li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
   ul.skills li b { color: var(--ink); }
-
-  .summary p {
-    position: relative;
-    padding-left: 18px;
-    margin: 5px 0;
-    color: var(--muted);
-  }
-  .summary p::before {
-    content: "◆";
-    position: absolute;
-    left: 0;
-    font-size: 9px;
-    top: 5px;
-    color: var(--accent);
-  }
-
-  .edu-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-  }
+  /* 自我评价 */
+  .summary p { position: relative; padding-left: 18px; margin: 5px 0; color: var(--muted); }
+  .summary p::before { content: "◆"; position: absolute; left: 0; font-size: 9px; top: 5px; color: var(--accent); }
+  /* 教育 */
+  .edu-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
   .edu-row .school { font-weight: 700; }
   .edu-row .major { color: var(--muted); }
   .edu-row .date { color: var(--muted); font-size: 12px; }
-
-  @media print {
-    body { background: #fff; }
-    .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
-    @page { size: A4; margin: 12mm; }
-    .toolbar, .edit-tip { display: none !important; }
-  }
-
-  /* ===== 编辑工具栏 ===== */
+  /* 工具栏 */
   .toolbar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: rgba(255,255,255,.95);
-    backdrop-filter: blur(6px);
-    box-shadow: 0 2px 10px rgba(0,0,0,.1);
-    font-size: 13px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    display: flex; align-items: center; gap: 8px; padding: 8px 16px;
+    background: rgba(255,255,255,.95); backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(0,0,0,.1); font-size: 13px;
   }
   .toolbar .brand { font-weight: 700; color: var(--accent-dark); margin-right: auto; }
   .toolbar button {
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--ink);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: all .15s;
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
+    padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all .15s;
   }
   .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
   .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .toolbar button.primary:hover { background: var(--accent-dark); color: #fff; }
-  .toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  body.editing .page { outline: 2px dashed var(--accent); outline-offset: 6px; }
-  body.editing [contenteditable="true"]:hover { background: #eef4ff; }
-  .edit-tip {
-    position: fixed;
-    bottom: 16px; left: 50%;
-    transform: translateX(-50%);
-    z-index: 999;
-    background: var(--accent-dark);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,.2);
-    display: none;
+  @media print {
+    body { background: #fff; padding-top: 0; }
+    .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
+    @page { size: A4; margin: 12mm; }
+    .toolbar { display: none !important; }
   }
-  body.editing .edit-tip { display: block; }
-  body { padding-top: 52px; }
-  @media print { body { padding-top: 0; } }
+  .load-error { max-width: 600px; margin: 40px auto; padding: 20px; background: #fff3f3; border: 1px solid #ffcccc; border-radius: 8px; color: #b00; }
 </style>
 </head>
 <body>
 
 <div class="toolbar">
-  <span class="brand">📄 我的在线简历</span>
-  <button id="btnEdit">✏️ 编辑</button>
-  <button id="btnSave" class="primary">💾 保存</button>
-  <button id="btnPdf">⬇️ 导出 PDF</button>
-  <button id="btnHtml">⬇️ 导出 HTML</button>
-  <button id="btnReset">↺ 恢复默认</button>
-</div>
-<div class="edit-tip">编辑模式已开启，直接点击文字即可修改；改完点「保存」</div>
-
-<div class="page" id="resume">
-
-  <!-- 头部 -->
-  <header class="header">
-    <div class="head-left">
-      <div class="name">李&nbsp;&nbsp;白</div>
-      <div class="role">嵌入式软件工程师</div>
-      <div class="contact">
-        <span><b>性别：</b>———</span>
-        <span><b>学历：</b>本科</span>
-        <span><b>毕业院校：</b>XXX 大学</span><br>
-        <span><b>籍贯：</b>———</span>
-        <span><b>现居住地：</b>———</span><br>
-        <span><b>联系方式：</b>———</span>
-        <span><b>邮箱：</b>———</span>
-      </div>
-    </div>
-    <div class="photo" id="photo" title="点击上传照片">
-      <span class="photo-hint">点击<br>上传照片</span>
-      <span class="photo-mask">更换照片</span>
-    </div>
-    <input type="file" id="photoInput" accept="image/*" style="display:none">
-    <input type="hidden" id="photoData">
-  </header>
-
-  <!-- 求职意向 -->
-  <div class="intent">
-    <div class="chip"><div class="k">期望岗位</div><div class="v">嵌入式软件工程师</div></div>
-    <div class="chip"><div class="k">到岗时间</div><div class="v">一周内</div></div>
-    <div class="chip"><div class="k">期望薪资</div><div class="v">面议</div></div>
-  </div>
-
-  <!-- 工作经历 -->
-  <section class="section">
-    <div class="section-title">工作经历</div>
-
-    <div class="item">
-      <div class="item-head">
-        <span><span class="org">小米 IoT 平台</span> &nbsp;·&nbsp; <span class="pos">BLE Mesh 蓝牙解决方案工程师</span></span>
-        <span class="date">2025.09 ~ 至今</span>
-      </div>
-      <ul class="duties">
-        <li>负责小米 IoT 平台蓝牙模组（MHCB12G / MHCB05P）的固件方案验证与厂商技术支持，覆盖开关、灯、传感器等品类的 BLE Mesh 产品接入全流程；</li>
-        <li>搭建 RTL8762E 交叉编译环境（WSL + ARM GCC + NuttX），解决构建链路中静态库 libzblue.a 的符号冲突问题（定位冲突 .o 文件，修改 Makefile 链接顺序），输出环境配置指南；</li>
-        <li>完成 BLE Mesh 低功耗双键开关方案全链路验证：GPIO 中断去抖 → DLPS 休眠唤醒（PAD 状态保存/恢复 + WakeUpPin 极性切换） → Mesh 属性上报 → OTA 升降级；</li>
-        <li>开发自定义 GATT 服务：在 Zephyr BLE 栈中注册私有特征值，解决静态库与应用层定义冲突，实现扩展数据通道；</li>
-        <li>实现 Mesh 设备天气获取功能；</li>
-        <li>分析 MiBeacon 广播帧格式与 Frame Control 位域，定位厂商广播包配置错误；分析 HCI 日志，定位连接层异常根因。</li>
-      </ul>
-    </div>
-
-    <div class="item">
-      <div class="item-head">
-        <span><span class="org">南京乐诊生物技术有限公司</span> &nbsp;·&nbsp; <span class="pos">嵌入式开发工程师</span></span>
-        <span class="date">2023.04 ~ 2025.07</span>
-      </div>
-      <ul class="duties">
-        <li>负责单片机（STM32、ESP32 等）常见接口（I2C、UART、SPI 等）技术的编程与开发；</li>
-        <li>与硬件工程师共同完成嵌入式软件功能调试，分析并解决开发中出现的问题；</li>
-        <li>团队合作，根据老版本问题升级优化设计方案进行版本更迭；</li>
-        <li>完成系统逻辑程序设计，实现与上位机软件的交互通信设计开发；</li>
-        <li>针对硬件外围进行数据采集程序设计，实现数据的采集存储、优化与传输；</li>
-        <li>配合完成系统性能、稳定性等软件优化工作，撰写嵌入式软件设计相关技术文档并辅助功能测试。</li>
-      </ul>
-    </div>
-
-    <div class="item">
-      <div class="item-head">
-        <span><span class="org">南京麦堤微林信息科技有限公司</span> &nbsp;·&nbsp; <span class="pos">WebGIS 开发工程师</span></span>
-        <span class="date">2020.06 ~ 2023.03</span>
-      </div>
-      <div class="desc"><p>参与开发基于 Cesium 结合物联网的智慧城市、智慧社区、智能矿山、智慧管网项目：</p></div>
-      <ul class="duties">
-        <li>用 Cesium 搭建 3D 场景，加载地图、地形数据，导入建筑模型（BIM / 倾斜摄影），还原真实区域并完成前端页面绘制；</li>
-        <li>对接后端 Java 接口，通过 AJAX 实时接收物联网设备数据（电梯状态、传感器数值等）；</li>
-        <li>数据可视化绑定，把数据“贴”在 3D 场景上：点社区电梯看运行状态，点交通路口看车流量；</li>
-        <li>用热力图显示社区 PM2.5、交通拥堵点，设备故障在模型上标红提醒；</li>
-        <li>实现智能巡检、告警联动、设备管理、应急处置等功能。</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 专业技能 -->
-  <section class="section">
-    <div class="section-title">专业技能</div>
-    <ul class="skills">
-      <li>熟悉 <b>C/C++</b>、进程间通信、多线程编程、文件 IO 操作，熟练掌握代码模块化、规范化设计；</li>
-      <li>熟练开发 <b>ESP32、STM32（F103 等系列）</b> MCU，熟练使用 STM 标准库、GPIO、中断、定时器、PWM、看门狗、实时时钟；</li>
-      <li>精通 <b>USART、I2C、SPI</b> 等外设驱动开发，以及 RS485、Modbus 协议，能完成传感器与 MCU 联调；</li>
-      <li>熟练使用 <b>FreeRTOS</b> 实时操作系统应用开发，理解任务调度、信号量、消息队列、资源管理等核心机制；</li>
-      <li>掌握 <b>嵌入式 Linux</b> 基础（文件系统、进程管理）与常见 shell 命令，熟练使用交叉编译工具链，会基于 <b>RK3568</b> 的系统移植；</li>
-      <li>掌握 <b>Qt</b> 开发，熟练使用 Qt 框架、Qt 数据库、Qt 多线程、Qt 自定义控件，可完成嵌入式界面及跨平台应用开发；</li>
-      <li>熟练适配 DHT11/SHT30 温湿度传感器、RS485 温湿度变送器、红外传感器、MPU6050 陀螺仪；精通 <b>LoRa、NB-IoT、ZigBee、蓝牙</b> 等通信模块，及 OLED、MIFARE S50 射频识别模块应用开发；</li>
-      <li>具备 HTML、CSS、JavaScript、CesiumJS 基础，可实现网页交互与界面开发；</li>
-      <li>熟练使用示波器、JTAG 仿真器排查硬件故障；结合日志、断点调试定位软硬件问题；掌握 <b>Git</b> 版本控制，熟悉 SVN；能看懂 PCB 原理图，掌握嵌入式开发全流程工具使用。</li>
-    </ul>
-  </section>
-
-  <!-- 项目经历 -->
-  <section class="section">
-    <div class="section-title">项目经历</div>
-
-    <div class="item">
-      <div class="item-head">
-        <span class="org">室外菌落作物生长环境监测系统</span>
-        <span class="date">2025.02 ~ 2025.07</span>
-      </div>
-      <div class="tech"><b>技术栈：</b>STM32F103C8T6、OV7670 摄像头、CC2530 ZigBee、BC28 NB-IoT、SHT30、BH1750、DS3231M、W25Q64、I2C/SPI/UART、TCP、Base64、CRC、FreeRTOS</div>
-      <div class="desc"><p><b>项目描述：</b>面向微生物科研 / 农业场景的室外环境监测系统，采用主从机协同架构，实现生长环境参数与图像的采集、无线传输及远程监控。主机采集温湿度、光照，从机搭载摄像头获取菌落图像，经 ZigBee 整合后由主机通过 NB-IoT（BC28）经 TCP 上传服务器，搭载 7.4V 18650 锂电池满足野外 15-30 天续航与数据零丢失要求。</p></div>
-      <ul class="duties">
-        <li><b>主机控制端：</b>引入 FreeRTOS 创建数据采集、ZigBee 通信、NB-IoT 传输等多任务并行调度；实现 I2C 驱动，按 SHT30 时序采集温湿度并按手册公式换算，CRC8 校验保障数据完整性；</li>
-        <li><b>从机采集端：</b>I2C 配置 OV7670 分辨率（640×480），并行接口 + 外部中断抓取图像，Base64 编码、W25Q128 存储；ZigBee 分片传输（212 字节）+ 帧头校验 + CRC16 + 3 次重传，保证 100 米内成功率；从主机同步 RTC 时间戳保证图像与环境数据时间一致；</li>
-        <li><b>通信与数据处理：</b>数据按 JSON 标准化封装（设备 ID、时间戳、状态），图像以二进制经 TCP 上传；BC28 AT 指令封装连接/发送/断开，自定义帧格式（帧头+长度+数据+校验）解决粘包；基于 SPI 开发 W25Q64 循环覆盖存储，断网本地缓存、恢复后按时间戳补传；</li>
-        <li><b>低功耗策略：</b>外围模块按手册配置低功耗，STM32 设置 STOP 模式结合外部时钟唤醒，降低整体功耗。</li>
-      </ul>
-    </div>
-
-    <div class="item">
-      <div class="item-head">
-        <span class="org">实验室物联网火灾感知系统</span>
-        <span class="date">2024.09 ~ 2025.02</span>
-      </div>
-      <div class="tech"><b>技术栈：</b>C/C++、Qt 框架、STM32F103RCT6、ESP8266 Wi-Fi、MQTT、SHT30、MQ2、红外火焰传感器、OLED、Keil MDK、STM32CubeMX、Qt Creator</div>
-      <div class="desc"><p><b>项目描述：</b>基于 STM32F103RCT6 的实验室火灾安全监测系统，集成 SHT30、红外火焰、MQ2 传感器采集温湿度、明火、烟雾/可燃气体数据，超阈值触发蜂鸣器报警，OLED 实时显示风险等级；通过 ESP8266 经 MQTT 上传华为云 IoT 平台，PC 上位机展示多台设备实时状态，实现本地监测与远程监控结合。</p></div>
-      <ul class="duties">
-        <li><b>嵌入式底层：</b>C 语言编写 SHT30、火焰、MQ2、蜂鸣器、OLED 驱动；配置 IWDG 看门狗（2s 超时复位）与喂狗，开发故障检测模块（通信超时 / 数据越界上报）；实现 ESP8266 断网检测（10s 周期）与阶梯式重连（最多 5 次，1s→2s→4s）；TIM 分层采集调度，Flash 环形缓冲区缓存断网数据并联网补发；</li>
-        <li><b>Qt 监控平台：</b>登录/注册（密码加密）、权限分级、验证码改密；设备全生命周期与分组管理；实时数据可视化（折线/柱状图）、历史查询与 CSV/Excel 导出；多类型日志分级标色，告警规则配置与邮件/短信通知。</li>
-      </ul>
-    </div>
-
-    <div class="item">
-      <div class="item-head">
-        <span class="org">基于 RK3568 边缘计算与 STM32 的工业级智能监控平台</span>
-        <span class="date">2023.06 ~ 2024.08</span>
-      </div>
-      <div class="tech"><b>技术栈：</b>C/C++、FreeRTOS、UART、LoRa、NB-IoT、I2C/SPI/ADC、Qt、SQLServer、MQTT、HTTP/HTTPS、Linux 4.19 内核</div>
-      <div class="desc"><p><b>项目描述：</b>由 STM32F103ZET6 采集终端、RK3568 主服务器及远程 Web 监控终端组成，面向工业生产现场设备状态与环境监控。RK3568 搭载定制 Linux 统一管控设备并集中处理、存储、分发数据；STM32 采集温度、压力、振动等参数经 LoRa / NB-IoT 上传；Web 端支持实时监控、远程控制、历史查询与异常告警。</p></div>
-      <ul class="duties">
-        <li><b>STM32 采集终端：</b>硬件电路设计与固件开发，移植 FreeRTOS 配置多任务调度；通过 UART/I2C/SPI/ADC 编写传感器驱动；编写 LoRa 近距离通信与 NB-IoT 驱动，调用 HTTP/HTTPS 完成数据上传；</li>
-        <li><b>RK3568 定制 Linux：</b>aarch64-linux-gnu 交叉编译，Buildroot 编译 Linux 4.19 内核并 menuconfig 裁剪，添加 Qt/libcurl/SQLite 生成根文件系统；修改 U-Boot 启动参数与 bootdelay；编写 MIPI 7 寸屏设备树、定制开机 LOGO 与 Qt 自启动脚本；</li>
-        <li><b>Qt 监控平台：</b>基于 Qt Widgets + SQLite3，多线程接收 STM32 数据按设备/时间分类存储，内存缓存提升读写效率；设备启停控制与状态联动；系统日志与超限弹窗告警；登录鉴权与动态权限控制；</li>
-        <li><b>Web 远程监控：</b>实时监控面板（图表可视化）、远程启停/参数设置、历史查询与导出、分级告警中心、用户权限与设备分组管理。</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 教育经历 -->
-  <section class="section">
-    <div class="section-title">教育经历</div>
-    <div class="edu-row">
-      <span><span class="school">XXX 大学</span> &nbsp;·&nbsp; <span class="major">XXX 专业</span></span>
-      <span class="date">2016.09 ~ 2020.07</span>
-    </div>
-  </section>
-
-  <!-- 自我评价 -->
-  <section class="section">
-    <div class="section-title">自我评价</div>
-    <div class="summary">
-      <p>对工作与生活充满激情，乐观积极、适应能力强，工作认真负责，注重细节与结果；面对问题耐力十足，善于抽丝剥茧、逐层定位并解决。</p>
-      <p>自我驱动性强，具备快速学习新技术的能力，对编程与技术钻研有持续热情。</p>
-      <p>具备清晰的分析思维和问题解决能力，能独立思考并主动寻求解决方案。</p>
-    </div>
-  </section>
-
+  <span class="brand">📄 我的简历</span>
+  <button id="btnPdf" class="primary">⬇️ 导出 PDF</button>
 </div>
 
+<div class="page" id="resume"></div>
+
+<input type="file" id="photoInput" accept="image/*" style="display:none">
+
+<script src="data.js"></script>
 <script>
 (function () {
-  var KEY = 'my-resume-html-v1';
-  var resume = document.getElementById('resume');
-  var defaultHTML = resume.innerHTML;
+  var PHOTO_KEY = 'resume-photo-v1';
 
-  // 载入已保存的内容
-  var saved = localStorage.getItem(KEY);
-  if (saved) resume.innerHTML = saved;
+  function esc(s) { return String(s == null ? '' : s); }
 
-  // ===== 照片上传 =====
+  function render(d) {
+    document.title = d.title || '简历';
+
+    var basicHtml = d.basic.map(function (b) {
+      return '<span><b>' + esc(b.label) + '：</b>' + esc(b.value) + '</span>';
+    }).join('');
+
+    var intentHtml = d.intent.map(function (c) {
+      return '<div class="chip"><div class="k">' + esc(c.k) + '</div><div class="v">' + esc(c.v) + '</div></div>';
+    }).join('');
+
+    var workHtml = d.work.map(function (w) {
+      var duties = (w.duties || []).map(function (x) { return '<li>' + x + '</li>'; }).join('');
+      return '<div class="item"><div class="item-head">'
+        + '<span><span class="org">' + esc(w.org) + '</span> &nbsp;·&nbsp; <span class="pos">' + esc(w.pos) + '</span></span>'
+        + '<span class="date">' + esc(w.date) + '</span></div>'
+        + '<ul class="duties">' + duties + '</ul></div>';
+    }).join('');
+
+    var skillsHtml = (d.skills || []).map(function (s) { return '<li>' + s + '</li>'; }).join('');
+
+    var projHtml = d.projects.map(function (p) {
+      var duties = (p.duties || []).map(function (x) { return '<li>' + x + '</li>'; }).join('');
+      return '<div class="item"><div class="item-head">'
+        + '<span class="org">' + esc(p.name) + '</span><span class="date">' + esc(p.date) + '</span></div>'
+        + (p.tech ? '<div class="tech"><b>技术栈：</b>' + esc(p.tech) + '</div>' : '')
+        + (p.desc ? '<div class="desc"><p><b>项目描述：</b>' + esc(p.desc) + '</p></div>' : '')
+        + (duties ? '<ul class="duties">' + duties + '</ul>' : '') + '</div>';
+    }).join('');
+
+    var eduHtml = d.education.map(function (e) {
+      return '<div class="edu-row"><span><span class="school">' + esc(e.school) + '</span> &nbsp;·&nbsp; <span class="major">' + esc(e.major) + '</span></span>'
+        + '<span class="date">' + esc(e.date) + '</span></div>';
+    }).join('');
+
+    var summaryHtml = (d.summary || []).map(function (s) { return '<p>' + s + '</p>'; }).join('');
+
+    document.getElementById('resume').innerHTML =
+      '<header class="header"><div class="head-left">'
+        + '<div class="name">' + esc(d.name) + '</div>'
+        + '<div class="role">' + esc(d.role) + '</div>'
+        + '<div class="contact">' + basicHtml + '</div>'
+      + '</div>'
+      + '<div class="photo" id="photo" title="点击上传照片"><span class="photo-hint">点击<br>上传照片</span><span class="photo-mask">更换照片</span></div>'
+      + '</header>'
+      + '<div class="intent">' + intentHtml + '</div>'
+      + '<section class="section"><div class="section-title">工作经历</div>' + workHtml + '</section>'
+      + '<section class="section"><div class="section-title">专业技能</div><ul class="skills">' + skillsHtml + '</ul></section>'
+      + '<section class="section"><div class="section-title">项目经历</div>' + projHtml + '</section>'
+      + '<section class="section"><div class="section-title">教育经历</div>' + eduHtml + '</section>'
+      + '<section class="section"><div class="section-title">自我评价</div><div class="summary">' + summaryHtml + '</div></section>';
+
+    bindPhoto();
+  }
+
   function bindPhoto() {
     var photo = document.getElementById('photo');
     var input = document.getElementById('photoInput');
-    if (!photo || !input) return;
+    if (!photo) return;
+    var saved = localStorage.getItem(PHOTO_KEY);
+    if (saved) { photo.style.backgroundImage = 'url(' + saved + ')'; photo.classList.add('has-img'); }
     photo.addEventListener('click', function () { input.click(); });
-    input.addEventListener('change', function () {
+    input.onchange = function () {
       var file = input.files && input.files[0];
       if (!file) return;
-      if (file.size > 3 * 1024 * 1024) { toast('图片建议小于 3MB'); }
       var reader = new FileReader();
       reader.onload = function (e) {
         photo.style.backgroundImage = 'url(' + e.target.result + ')';
         photo.classList.add('has-img');
-        toast('照片已更新，记得点保存');
+        try { localStorage.setItem(PHOTO_KEY, e.target.result); } catch (err) {}
       };
       reader.readAsDataURL(file);
-    });
-  }
-  bindPhoto();
-
-  var editing = false;
-  var btnEdit = document.getElementById('btnEdit');
-
-  function setEditable(on) {
-    editing = on;
-    document.body.classList.toggle('editing', on);
-    resume.setAttribute('contenteditable', on ? 'true' : 'false');
-    btnEdit.classList.toggle('active', on);
-    btnEdit.textContent = on ? '✏️ 编辑中' : '✏️ 编辑';
+    };
   }
 
-  btnEdit.addEventListener('click', function () { setEditable(!editing); });
+  document.getElementById('btnPdf').addEventListener('click', function () { window.print(); });
 
-  document.getElementById('btnSave').addEventListener('click', function () {
-    localStorage.setItem(KEY, resume.innerHTML);
-    setEditable(false);
-    toast('已保存到本浏览器');
-  });
-
-  document.getElementById('btnPdf').addEventListener('click', function () {
-    var wasEditing = editing;
-    if (wasEditing) setEditable(false);
-    setTimeout(function () { window.print(); }, 50);
-  });
-
-  document.getElementById('btnHtml').addEventListener('click', function () {
-    // 导出一份完整、干净的 HTML（不含工具栏），可直接部署或交给 AI 修改
-    var clone = document.documentElement.cloneNode(true);
-    var tb = clone.querySelector('.toolbar'); if (tb) tb.remove();
-    var tip = clone.querySelector('.edit-tip'); if (tip) tip.remove();
-    var scr = clone.querySelector('script'); if (scr) scr.remove();
-    var page = clone.querySelector('#resume');
-    if (page) { page.setAttribute('contenteditable', 'false'); page.innerHTML = resume.innerHTML; }
-    var html = '<!DOCTYPE html>\n' + clone.outerHTML;
-    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'resume.html';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
-
-  document.getElementById('btnReset').addEventListener('click', function () {
-    if (confirm('确定恢复为默认内容？你保存的修改将被清除。')) {
-      localStorage.removeItem(KEY);
-      resume.innerHTML = defaultHTML;
-      bindPhoto();
-      setEditable(false);
-      toast('已恢复默认');
+  if (typeof RESUME === 'undefined') {
+    document.getElementById('resume').innerHTML =
+      '<div class="load-error">没读到简历内容（data.js）。请确认 data.js 和 index.html 在同一目录，且 data.js 语法正确（引号、逗号别漏）。</div>';
+  } else {
+    try { render(RESUME); }
+    catch (e) {
+      document.getElementById('resume').innerHTML =
+        '<div class="load-error">渲染出错，多半是 data.js 里少了引号或逗号。错误信息：' + esc(e.message) + '</div>';
     }
-  });
-
-  function toast(msg) {
-    var t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;background:#1f6feb;color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)';
-    document.body.appendChild(t);
-    setTimeout(function () { t.remove(); }, 1800);
   }
 })();
 </script>

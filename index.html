@@ -194,11 +194,71 @@
     body { background: #fff; }
     .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
     @page { size: A4; margin: 12mm; }
+    .toolbar, .edit-tip { display: none !important; }
   }
+
+  /* ===== 编辑工具栏 ===== */
+  .toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(0,0,0,.1);
+    font-size: 13px;
+  }
+  .toolbar .brand { font-weight: 700; color: var(--accent-dark); margin-right: auto; }
+  .toolbar button {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .15s;
+  }
+  .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+  .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .toolbar button.primary:hover { background: var(--accent-dark); color: #fff; }
+  .toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  body.editing .page { outline: 2px dashed var(--accent); outline-offset: 6px; }
+  body.editing [contenteditable="true"]:hover { background: #eef4ff; }
+  .edit-tip {
+    position: fixed;
+    bottom: 16px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    background: var(--accent-dark);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    display: none;
+  }
+  body.editing .edit-tip { display: block; }
+  body { padding-top: 52px; }
+  @media print { body { padding-top: 0; } }
 </style>
 </head>
 <body>
-<div class="page">
+
+<div class="toolbar">
+  <span class="brand">📄 我的在线简历</span>
+  <button id="btnEdit">✏️ 编辑</button>
+  <button id="btnSave" class="primary">💾 保存</button>
+  <button id="btnPdf">⬇️ 导出 PDF</button>
+  <button id="btnHtml">⬇️ 导出 HTML</button>
+  <button id="btnReset">↺ 恢复默认</button>
+</div>
+<div class="edit-tip">编辑模式已开启，直接点击文字即可修改；改完点「保存」</div>
+
+<div class="page" id="resume">
 
   <!-- 头部 -->
   <header class="header">
@@ -359,5 +419,76 @@
   </section>
 
 </div>
+
+<script>
+(function () {
+  var KEY = 'my-resume-html-v1';
+  var resume = document.getElementById('resume');
+  var defaultHTML = resume.innerHTML;
+
+  // 载入已保存的内容
+  var saved = localStorage.getItem(KEY);
+  if (saved) resume.innerHTML = saved;
+
+  var editing = false;
+  var btnEdit = document.getElementById('btnEdit');
+
+  function setEditable(on) {
+    editing = on;
+    document.body.classList.toggle('editing', on);
+    resume.setAttribute('contenteditable', on ? 'true' : 'false');
+    btnEdit.classList.toggle('active', on);
+    btnEdit.textContent = on ? '✏️ 编辑中' : '✏️ 编辑';
+  }
+
+  btnEdit.addEventListener('click', function () { setEditable(!editing); });
+
+  document.getElementById('btnSave').addEventListener('click', function () {
+    localStorage.setItem(KEY, resume.innerHTML);
+    setEditable(false);
+    toast('已保存到本浏览器');
+  });
+
+  document.getElementById('btnPdf').addEventListener('click', function () {
+    var wasEditing = editing;
+    if (wasEditing) setEditable(false);
+    setTimeout(function () { window.print(); }, 50);
+  });
+
+  document.getElementById('btnHtml').addEventListener('click', function () {
+    // 导出一份完整、干净的 HTML（不含工具栏），可直接部署或交给 AI 修改
+    var clone = document.documentElement.cloneNode(true);
+    var tb = clone.querySelector('.toolbar'); if (tb) tb.remove();
+    var tip = clone.querySelector('.edit-tip'); if (tip) tip.remove();
+    var scr = clone.querySelector('script'); if (scr) scr.remove();
+    var page = clone.querySelector('#resume');
+    if (page) { page.setAttribute('contenteditable', 'false'); page.innerHTML = resume.innerHTML; }
+    var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'resume.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  document.getElementById('btnReset').addEventListener('click', function () {
+    if (confirm('确定恢复为默认内容？你保存的修改将被清除。')) {
+      localStorage.removeItem(KEY);
+      resume.innerHTML = defaultHTML;
+      setEditable(false);
+      toast('已恢复默认');
+    }
+  });
+
+  function toast(msg) {
+    var t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;background:#1f6feb;color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)';
+    document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 1800);
+  }
+})();
+</script>
 </body>
 </html>

@@ -15,7 +15,7 @@ const RESUME = {
     },
     {
       "label": "毕业院校",
-      "value": "XXX11111111 大学"
+      "value": "XX"
     },
     {
       "label": "籍贯",

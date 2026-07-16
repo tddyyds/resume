@@ -66,19 +66,37 @@
   .header .contact span { display: inline-block; margin-right: 18px; white-space: nowrap; }
   .header .contact b { color: var(--ink); font-weight: 600; }
   .photo {
+    position: relative;
     width: 90px;
     height: 120px;
     flex: 0 0 auto;
     border: 1px solid var(--line);
     border-radius: 4px;
-    background: var(--bg-soft);
+    background: var(--bg-soft) center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #aab2bd;
     font-size: 12px;
     text-align: center;
+    cursor: pointer;
+    overflow: hidden;
   }
+  .photo.has-img .photo-hint { display: none; }
+  .photo:hover .photo-mask { opacity: 1; }
+  .photo-mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity .15s;
+  }
+  @media print { .photo-mask { display: none; } .photo { cursor: default; } }
 
   /* ===== 求职意向条 ===== */
   .intent {
@@ -275,7 +293,12 @@
         <span><b>邮箱：</b>———</span>
       </div>
     </div>
-    <div class="photo">照片<br>区域</div>
+    <div class="photo" id="photo" title="点击上传照片">
+      <span class="photo-hint">点击<br>上传照片</span>
+      <span class="photo-mask">更换照片</span>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" style="display:none">
+    <input type="hidden" id="photoData">
   </header>
 
   <!-- 求职意向 -->
@@ -430,6 +453,27 @@
   var saved = localStorage.getItem(KEY);
   if (saved) resume.innerHTML = saved;
 
+  // ===== 照片上传 =====
+  function bindPhoto() {
+    var photo = document.getElementById('photo');
+    var input = document.getElementById('photoInput');
+    if (!photo || !input) return;
+    photo.addEventListener('click', function () { input.click(); });
+    input.addEventListener('change', function () {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      if (file.size > 3 * 1024 * 1024) { toast('图片建议小于 3MB'); }
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        photo.style.backgroundImage = 'url(' + e.target.result + ')';
+        photo.classList.add('has-img');
+        toast('照片已更新，记得点保存');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  bindPhoto();
+
   var editing = false;
   var btnEdit = document.getElementById('btnEdit');
 
@@ -476,6 +520,7 @@
     if (confirm('确定恢复为默认内容？你保存的修改将被清除。')) {
       localStorage.removeItem(KEY);
       resume.innerHTML = defaultHTML;
+      bindPhoto();
       setEditable(false);
       toast('已恢复默认');
     }

@@ -17,71 +17,38 @@
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body {
     font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Roboto, sans-serif;
-    color: var(--ink);
-    font-size: 13px;
-    line-height: 1.7;
-    background: #dfe3e8;
-    padding-top: 52px;
+    color: var(--ink); font-size: 13px; line-height: 1.7; background: #dfe3e8; padding-top: 52px;
   }
   .page {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 12px auto;
-    padding: 16mm 15mm;
-    background: #fff;
-    box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    width: 210mm; min-height: 297mm; margin: 12px auto; padding: 16mm 15mm;
+    background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,.12);
   }
-  /* 头部 */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    padding-bottom: 16px;
-    border-bottom: 3px solid var(--accent);
-  }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 16px; border-bottom: 3px solid var(--accent); }
   .header .name { font-size: 30px; font-weight: 700; letter-spacing: 2px; color: var(--accent-dark); }
   .header .role { margin-top: 4px; font-size: 14px; color: var(--accent); font-weight: 600; }
   .header .contact { margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.9; }
-  .header .contact span { display: inline-block; margin-right: 18px; white-space: nowrap; }
+  .header .contact span.kv { display: inline-block; margin-right: 18px; white-space: nowrap; }
   .header .contact b { color: var(--ink); font-weight: 600; }
   .photo {
     position: relative; width: 90px; height: 120px; flex: 0 0 auto;
-    border: 1px solid var(--line); border-radius: 4px;
-    background: var(--bg-soft) center/cover no-repeat;
-    display: flex; align-items: center; justify-content: center;
-    color: #aab2bd; font-size: 12px; text-align: center; cursor: pointer; overflow: hidden;
+    border: 1px solid var(--line); border-radius: 4px; background: var(--bg-soft) center/cover no-repeat;
+    display: flex; align-items: center; justify-content: center; color: #aab2bd; font-size: 12px;
+    text-align: center; cursor: pointer; overflow: hidden;
   }
   .photo.has-img .photo-hint { display: none; }
   .photo:hover .photo-mask { opacity: 1; }
-  .photo-mask {
-    position: absolute; inset: 0; background: rgba(0,0,0,.45); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-size: 12px;
-    opacity: 0; transition: opacity .15s;
-  }
+  .photo-mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0; transition: opacity .15s; }
   @media print { .photo-mask { display: none; } .photo { cursor: default; } }
-  /* 求职意向 */
   .intent { display: flex; gap: 10px; margin: 14px 0 4px; }
-  .intent .chip {
-    flex: 1; background: var(--bg-soft); border-radius: 6px; padding: 8px 12px;
-    font-size: 12px; border-left: 3px solid var(--accent);
-  }
+  .intent .chip { flex: 1; background: var(--bg-soft); border-radius: 6px; padding: 8px 12px; font-size: 12px; border-left: 3px solid var(--accent); }
   .intent .chip .k { color: var(--muted); }
   .intent .chip .v { color: var(--ink); font-weight: 600; }
-  /* 区块标题 */
   .section { margin-top: 18px; }
-  .section-title {
-    display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;
-    color: var(--accent-dark); margin-bottom: 10px;
-  }
+  .section-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--accent-dark); margin-bottom: 10px; }
   .section-title::before { content: ""; width: 5px; height: 16px; background: var(--accent); border-radius: 2px; }
   .section-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-  /* 工作 / 项目条目 */
   .item { margin-bottom: 14px; page-break-inside: avoid; }
-  .item-head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    flex-wrap: wrap; gap: 4px 12px;
-  }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
   .item-head .org { font-weight: 700; font-size: 13.5px; }
   .item-head .pos { color: var(--accent); font-weight: 600; }
   .item-head .date { color: var(--muted); font-size: 12px; white-space: nowrap; }
@@ -91,48 +58,59 @@
   .desc p { margin: 2px 0; color: var(--muted); }
   ul.duties { margin: 5px 0 0 18px; }
   ul.duties li { margin: 3px 0; color: var(--muted); }
-  /* 技能 */
   ul.skills { list-style: none; }
   ul.skills li { position: relative; padding-left: 18px; margin: 5px 0; color: var(--muted); }
   ul.skills li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
   ul.skills li b { color: var(--ink); }
-  /* 自我评价 */
   .summary p { position: relative; padding-left: 18px; margin: 5px 0; color: var(--muted); }
   .summary p::before { content: "◆"; position: absolute; left: 0; font-size: 9px; top: 5px; color: var(--accent); }
-  /* 教育 */
   .edu-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
   .edu-row .school { font-weight: 700; }
   .edu-row .major { color: var(--muted); }
   .edu-row .date { color: var(--muted); font-size: 12px; }
-  /* 工具栏 */
   .toolbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-    display: flex; align-items: center; gap: 8px; padding: 8px 16px;
-    background: rgba(255,255,255,.95); backdrop-filter: blur(6px);
-    box-shadow: 0 2px 10px rgba(0,0,0,.1); font-size: 13px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999; display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(6px); box-shadow: 0 2px 10px rgba(0,0,0,.1); font-size: 13px;
   }
   .toolbar .brand { font-weight: 700; color: var(--accent-dark); margin-right: auto; }
-  .toolbar button {
-    border: 1px solid var(--line); background: #fff; color: var(--ink);
-    padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all .15s;
-  }
+  .toolbar button { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all .15s; }
   .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
   .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .toolbar button.primary:hover { background: var(--accent-dark); color: #fff; }
+  .load-error { max-width: 600px; margin: 40px auto; padding: 20px; background: #fff3f3; border: 1px solid #ffcccc; border-radius: 8px; color: #b00; }
+  .edit-tip { position: fixed; top: 52px; left: 0; right: 0; z-index: 998; background: var(--accent-dark); color: #fff; text-align: center; padding: 6px 12px; font-size: 12px; display: none; }
+  body.editing { padding-top: 84px; }
+  body.editing .edit-tip { display: block; }
+  body.editing [data-bind] { outline: 1px dashed #c3d3ef; outline-offset: 2px; border-radius: 2px; min-width: 20px; }
+  body.editing [data-bind]:hover { background: #eef4ff; }
+  body.editing [data-bind]:focus { outline: 2px solid var(--accent); background: #fff; }
+  .li-ctrl { display: none; }
+  body.editing .li-ctrl { display: inline-flex; gap: 4px; margin-left: 6px; vertical-align: middle; }
+  body.editing .li-ctrl button, body.editing .add-btn { border: 1px solid var(--line); background: #fff; color: var(--muted); width: 20px; height: 20px; line-height: 1; border-radius: 4px; cursor: pointer; font-size: 13px; padding: 0; }
+  body.editing .li-ctrl button:hover { border-color: var(--accent); color: var(--accent); }
+  .add-btn { display: none; }
+  body.editing .add-btn { display: inline-block; width: auto; padding: 2px 10px; height: auto; margin-top: 6px; font-size: 12px; color: var(--accent); }
   @media print {
     body { background: #fff; padding-top: 0; }
+    body.editing { padding-top: 0; }
     .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
     @page { size: A4; margin: 12mm; }
-    .toolbar { display: none !important; }
+    .toolbar, .edit-tip, .li-ctrl, .add-btn { display: none !important; }
+    [data-bind] { outline: none !important; }
   }
-  .load-error { max-width: 600px; margin: 40px auto; padding: 20px; background: #fff3f3; border: 1px solid #ffcccc; border-radius: 8px; color: #b00; }
 </style>
 </head>
 <body>
 
 <div class="toolbar">
   <span class="brand">📄 我的简历</span>
-  <button id="btnPdf" class="primary">⬇️ 导出 PDF</button>
+  <button id="btnEdit">✏️ 编辑</button>
+  <button id="btnSave" class="primary" style="display:none">☁️ 保存到云端</button>
+  <button id="btnDownload" style="display:none">⬇️ 下载 data.js</button>
+  <button id="btnCancel" style="display:none">取消</button>
+  <button id="btnPdf">⬇️ 导出 PDF</button>
 </div>
+<div class="edit-tip" id="editTip">编辑模式：点文字直接改；列表项旁 ＋/× 可增删。改完点「保存到云端」同步到所有设备（或「下载 data.js」手动上传）。</div>
 
 <div class="page" id="resume"></div>
 
@@ -142,50 +120,86 @@
 <script>
 (function () {
   var PHOTO_KEY = 'resume-photo-v1';
+  var TOKEN_KEY = 'gh-token';
+  var GH = { owner: 'tddyyds', repo: 'resume', path: 'data.js', branch: 'master' };
+
+  var resumeEl = document.getElementById('resume');
+  var editing = false;
+  var original = null, current = null;
 
   function esc(s) { return String(s == null ? '' : s); }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function getByPath(o, p) { return p.split('.').reduce(function (a, k) { return a[k]; }, o); }
+  function setByPath(o, p, v) { var ks = p.split('.'); var last = ks.pop(); var t = ks.reduce(function (a, k) { return a[k]; }, o); t[last] = v; }
+  function delByPath(o, p) { var ks = p.split('.'); var last = ks.pop(); var t = ks.reduce(function (a, k) { return a[k]; }, o); if (Array.isArray(t)) t.splice(Number(last), 1); else delete t[last]; }
+
+  function ctrl(delPath) { return '<span class="li-ctrl"><button type="button" data-action="del" data-path="' + delPath + '" title="删除">×</button></span>'; }
+  function addBtn(path, label) { return '<button type="button" class="add-btn" data-action="add" data-path="' + path + '">＋ ' + label + '</button>'; }
+  function b(path, val) { return '<span data-bind="' + path + '">' + val + '</span>'; }
+
+  function defaultFor(path) {
+    var key = path.split('.').pop();
+    if (key === 'duties') return '新的一条职责 / 描述';
+    if (key === 'skills') return '新技能描述';
+    if (key === 'summary') return '新的一条评价';
+    if (key === 'work') return { org: '公司名称', pos: '职位名称', date: '2020.01 ~ 2020.12', duties: ['职责描述'] };
+    if (key === 'projects') return { name: '项目名称', date: '2020.01 ~ 2020.12', tech: '技术栈', desc: '项目描述', duties: ['个人职责'] };
+    if (key === 'education') return { school: '学校名称', major: '专业名称', date: '2016.09 ~ 2020.07' };
+    if (key === 'basic') return { label: '标签', value: '内容' };
+    if (key === 'intent') return { k: '标签', v: '内容' };
+    return '';
+  }
 
   function render(d) {
     document.title = d.title || '简历';
 
-    var basicHtml = d.basic.map(function (b) {
-      return '<span><b>' + esc(b.label) + '：</b>' + esc(b.value) + '</span>';
+    var basicHtml = d.basic.map(function (x, i) {
+      return '<span class="kv"><b>' + b('basic.' + i + '.label', esc(x.label)) + '：</b>' + b('basic.' + i + '.value', esc(x.value)) + ctrl('basic.' + i) + '</span>';
+    }).join('') + addBtn('basic', '加一项');
+
+    var intentHtml = d.intent.map(function (x, i) {
+      return '<div class="chip"><div class="k">' + b('intent.' + i + '.k', esc(x.k)) + '</div><div class="v">' + b('intent.' + i + '.v', esc(x.v)) + ctrl('intent.' + i) + '</div></div>';
     }).join('');
 
-    var intentHtml = d.intent.map(function (c) {
-      return '<div class="chip"><div class="k">' + esc(c.k) + '</div><div class="v">' + esc(c.v) + '</div></div>';
-    }).join('');
-
-    var workHtml = d.work.map(function (w) {
-      var duties = (w.duties || []).map(function (x) { return '<li>' + x + '</li>'; }).join('');
+    var workHtml = d.work.map(function (w, i) {
+      var duties = (w.duties || []).map(function (x, j) {
+        return '<li>' + b('work.' + i + '.duties.' + j, x) + ctrl('work.' + i + '.duties.' + j) + '</li>';
+      }).join('');
       return '<div class="item"><div class="item-head">'
-        + '<span><span class="org">' + esc(w.org) + '</span> &nbsp;·&nbsp; <span class="pos">' + esc(w.pos) + '</span></span>'
-        + '<span class="date">' + esc(w.date) + '</span></div>'
-        + '<ul class="duties">' + duties + '</ul></div>';
+        + '<span><span class="org">' + b('work.' + i + '.org', esc(w.org)) + '</span> &nbsp;·&nbsp; <span class="pos">' + b('work.' + i + '.pos', esc(w.pos)) + '</span>' + ctrl('work.' + i) + '</span>'
+        + '<span class="date">' + b('work.' + i + '.date', esc(w.date)) + '</span></div>'
+        + '<ul class="duties">' + duties + '</ul>' + addBtn('work.' + i + '.duties', '添加职责') + '</div>';
+    }).join('') + addBtn('work', '添加一段工作经历');
+
+    var skillsHtml = (d.skills || []).map(function (s, i) {
+      return '<li>' + b('skills.' + i, s) + ctrl('skills.' + i) + '</li>';
     }).join('');
 
-    var skillsHtml = (d.skills || []).map(function (s) { return '<li>' + s + '</li>'; }).join('');
-
-    var projHtml = d.projects.map(function (p) {
-      var duties = (p.duties || []).map(function (x) { return '<li>' + x + '</li>'; }).join('');
+    var projHtml = d.projects.map(function (p, i) {
+      var duties = (p.duties || []).map(function (x, j) {
+        return '<li>' + b('projects.' + i + '.duties.' + j, x) + ctrl('projects.' + i + '.duties.' + j) + '</li>';
+      }).join('');
       return '<div class="item"><div class="item-head">'
-        + '<span class="org">' + esc(p.name) + '</span><span class="date">' + esc(p.date) + '</span></div>'
-        + (p.tech ? '<div class="tech"><b>技术栈：</b>' + esc(p.tech) + '</div>' : '')
-        + (p.desc ? '<div class="desc"><p><b>项目描述：</b>' + esc(p.desc) + '</p></div>' : '')
-        + (duties ? '<ul class="duties">' + duties + '</ul>' : '') + '</div>';
-    }).join('');
+        + '<span class="org">' + b('projects.' + i + '.name', esc(p.name)) + ctrl('projects.' + i) + '</span>'
+        + '<span class="date">' + b('projects.' + i + '.date', esc(p.date)) + '</span></div>'
+        + '<div class="tech"><b>技术栈：</b>' + b('projects.' + i + '.tech', esc(p.tech)) + '</div>'
+        + '<div class="desc"><p><b>项目描述：</b>' + b('projects.' + i + '.desc', esc(p.desc)) + '</p></div>'
+        + '<ul class="duties">' + duties + '</ul>' + addBtn('projects.' + i + '.duties', '添加职责') + '</div>';
+    }).join('') + addBtn('projects', '添加一个项目');
 
-    var eduHtml = d.education.map(function (e) {
-      return '<div class="edu-row"><span><span class="school">' + esc(e.school) + '</span> &nbsp;·&nbsp; <span class="major">' + esc(e.major) + '</span></span>'
-        + '<span class="date">' + esc(e.date) + '</span></div>';
-    }).join('');
+    var eduHtml = d.education.map(function (e, i) {
+      return '<div class="edu-row"><span><span class="school">' + b('education.' + i + '.school', esc(e.school)) + '</span> &nbsp;·&nbsp; <span class="major">' + b('education.' + i + '.major', esc(e.major)) + '</span>' + ctrl('education.' + i) + '</span>'
+        + '<span class="date">' + b('education.' + i + '.date', esc(e.date)) + '</span></div>';
+    }).join('') + addBtn('education', '加一条教育经历');
 
-    var summaryHtml = (d.summary || []).map(function (s) { return '<p>' + s + '</p>'; }).join('');
+    var summaryHtml = (d.summary || []).map(function (s, i) {
+      return '<p>' + b('summary.' + i, s) + ctrl('summary.' + i) + '</p>';
+    }).join('') + addBtn('summary', '加一条');
 
-    document.getElementById('resume').innerHTML =
+    resumeEl.innerHTML =
       '<header class="header"><div class="head-left">'
-        + '<div class="name">' + esc(d.name) + '</div>'
-        + '<div class="role">' + esc(d.role) + '</div>'
+        + '<div class="name">' + b('name', esc(d.name)) + '</div>'
+        + '<div class="role">' + b('role', esc(d.role)) + '</div>'
         + '<div class="contact">' + basicHtml + '</div>'
       + '</div>'
       + '<div class="photo" id="photo" title="点击上传照片"><span class="photo-hint">点击<br>上传照片</span><span class="photo-mask">更换照片</span></div>'
@@ -198,6 +212,12 @@
       + '<section class="section"><div class="section-title">自我评价</div><div class="summary">' + summaryHtml + '</div></section>';
 
     bindPhoto();
+    if (editing) setEditable(true);
+  }
+
+  function setEditable(on) {
+    var nodes = resumeEl.querySelectorAll('[data-bind]');
+    for (var i = 0; i < nodes.length; i++) nodes[i].contentEditable = on ? 'true' : 'false';
   }
 
   function bindPhoto() {
@@ -220,17 +240,93 @@
     };
   }
 
+  // 输入实时写回 current
+  resumeEl.addEventListener('input', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-bind]') : null;
+    if (el) setByPath(current, el.getAttribute('data-bind'), el.innerHTML.trim());
+  });
+
+  // 增删按钮
+  resumeEl.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('[data-action]') : null;
+    if (!btn) return;
+    e.preventDefault();
+    var action = btn.getAttribute('data-action');
+    var path = btn.getAttribute('data-path');
+    if (action === 'add') { getByPath(current, path).push(defaultFor(path)); }
+    else if (action === 'del') { delByPath(current, path); }
+    render(current);
+  });
+
+  function toggleBtns(on) {
+    document.getElementById('btnSave').style.display = on ? '' : 'none';
+    document.getElementById('btnDownload').style.display = on ? '' : 'none';
+    document.getElementById('btnCancel').style.display = on ? '' : 'none';
+    var be = document.getElementById('btnEdit');
+    be.textContent = on ? '✏️ 编辑中' : '✏️ 编辑';
+    be.classList.toggle('primary', on);
+  }
+
+  function enterEdit() { editing = true; document.body.classList.add('editing'); toggleBtns(true); setEditable(true); }
+  function exitEdit() { editing = false; document.body.classList.remove('editing'); toggleBtns(false); setEditable(false); }
+
+  document.getElementById('btnEdit').addEventListener('click', function () { if (editing) { exitEdit(); } else { enterEdit(); } });
+  document.getElementById('btnCancel').addEventListener('click', function () { current = clone(original); exitEdit(); render(current); });
   document.getElementById('btnPdf').addEventListener('click', function () { window.print(); });
+  document.getElementById('btnDownload').addEventListener('click', function () {
+    var blob = new Blob([serialize(current)], { type: 'text/javascript;charset=utf-8' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'data.js'; a.click(); URL.revokeObjectURL(a.href);
+    toast('已下载 data.js，可上传到 GitHub 覆盖同名文件');
+  });
+  document.getElementById('btnSave').addEventListener('click', saveCloud);
+
+  function serialize(d) {
+    return '/* 简历内容（由网页端“保存/下载”自动生成，可继续在网页或 GitHub 上编辑） */\n\nconst RESUME = ' + JSON.stringify(d, null, 2) + ';\n';
+  }
+  function b64(str) { return btoa(unescape(encodeURIComponent(str))); }
+
+  function saveCloud() {
+    var token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      token = prompt('首次保存需要 GitHub 令牌（只用于把改动提交回你的仓库，仅存在本浏览器）。\n生成方法：GitHub → Settings → Developer settings → Fine-grained tokens → 只授权 tddyyds/resume 仓库的 Contents 读写。\n\n把令牌粘贴到这里：');
+      if (!token) return;
+      token = token.trim();
+      localStorage.setItem(TOKEN_KEY, token);
+    }
+    var text = serialize(current);
+    var base = 'https://api.github.com/repos/' + GH.owner + '/' + GH.repo + '/contents/' + GH.path;
+    var headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
+    toast('正在保存…');
+    fetch(base + '?ref=' + GH.branch, { headers: headers })
+      .then(function (r) {
+        if (r.status === 401) { localStorage.removeItem(TOKEN_KEY); throw new Error('令牌无效或已过期，请重试并重新输入令牌'); }
+        return r.status === 200 ? r.json() : null;
+      })
+      .then(function (info) {
+        var body = { message: 'update resume via web', content: b64(text), branch: GH.branch };
+        if (info && info.sha) body.sha = info.sha;
+        return fetch(base, { method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, headers), body: JSON.stringify(body) });
+      })
+      .then(function (r) { return r.ok ? r.json() : r.json().then(function (e) { throw new Error(e.message || ('HTTP ' + r.status)); }); })
+      .then(function () { original = clone(current); exitEdit(); toast('✅ 已保存到云端，约 1 分钟后所有设备生效'); })
+      .catch(function (err) { alert('保存失败：' + err.message + '\n\n可改用「下载 data.js」，再到 github.com 上传覆盖同名文件。'); });
+  }
+
+  function toast(msg) {
+    var t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:1000;background:#1f6feb;color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.2)';
+    document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 2200);
+  }
 
   if (typeof RESUME === 'undefined') {
-    document.getElementById('resume').innerHTML =
-      '<div class="load-error">没读到简历内容（data.js）。请确认 data.js 和 index.html 在同一目录，且 data.js 语法正确（引号、逗号别漏）。</div>';
+    resumeEl.innerHTML = '<div class="load-error">没读到简历内容（data.js）。请确认 data.js 与 index.html 在同一目录。</div>';
   } else {
-    try { render(RESUME); }
-    catch (e) {
-      document.getElementById('resume').innerHTML =
-        '<div class="load-error">渲染出错，多半是 data.js 里少了引号或逗号。错误信息：' + esc(e.message) + '</div>';
-    }
+    original = clone(RESUME);
+    current = clone(RESUME);
+    try { render(current); }
+    catch (e) { resumeEl.innerHTML = '<div class="load-error">渲染出错：' + esc(e.message) + '</div>'; }
   }
 })();
 </script>

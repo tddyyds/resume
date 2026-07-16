@@ -15,11 +15,11 @@ const RESUME = {
     },
     {
       "label": "毕业院校",
-      "value": "XXX 大学"
+      "value": "XXX11111111 大学"
     },
     {
       "label": "籍贯",
-      "value": "—11——"
+      "value": "———"
     },
     {
       "label": "现居住地",

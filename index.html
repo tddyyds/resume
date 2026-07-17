@@ -90,12 +90,27 @@
   body.editing .li-ctrl button:hover { border-color: var(--accent); color: var(--accent); }
   .add-btn { display: none; }
   body.editing .add-btn { display: inline-block; width: auto; padding: 2px 10px; height: auto; margin-top: 6px; font-size: 12px; color: var(--accent); }
+  /* 内容/AI 编辑弹窗 */
+  .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1001; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-mask.show { display: flex; }
+  .modal { background: #fff; border-radius: 10px; width: min(880px, 100%); max-height: 90vh; display: flex; flex-direction: column; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .modal-head b { font-size: 15px; color: var(--accent-dark); }
+  .modal-head button { border: none; background: none; font-size: 24px; cursor: pointer; color: var(--muted); line-height: 1; }
+  .modal-tip { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.7; }
+  .modal textarea { width: 100%; flex: 1; min-height: 360px; font-family: Consolas, Menlo, monospace; font-size: 12px; line-height: 1.5; padding: 12px; border: 1px solid var(--line); border-radius: 6px; resize: vertical; white-space: pre; overflow: auto; }
+  .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .modal-actions button { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+  .modal-actions button:hover { border-color: var(--accent); color: var(--accent); }
+  .modal-actions button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .modal-actions button.primary:hover { background: var(--accent-dark); }
+  .modal-error { color: #b00; font-size: 12px; margin-top: 8px; white-space: pre-wrap; }
   @media print {
     body { background: #fff; padding-top: 0; }
     body.editing { padding-top: 0; }
     .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
     @page { size: A4; margin: 12mm; }
-    .toolbar, .edit-tip, .li-ctrl, .add-btn { display: none !important; }
+    .toolbar, .edit-tip, .li-ctrl, .add-btn, .modal-mask { display: none !important; }
     [data-bind] { outline: none !important; }
   }
 </style>
@@ -104,7 +119,8 @@
 
 <div class="toolbar">
   <span class="brand">📄 我的简历</span>
-  <button id="btnEdit">✏️ 编辑</button>
+  <button id="btnEdit">✏️ 逐项编辑</button>
+  <button id="btnData">📝 内容/AI 编辑</button>
   <button id="btnSave" class="primary" style="display:none">☁️ 保存到云端</button>
   <button id="btnDownload" style="display:none">⬇️ 下载 data.js</button>
   <button id="btnCancel" style="display:none">取消</button>
@@ -115,6 +131,23 @@
 <div class="page" id="resume"></div>
 
 <input type="file" id="photoInput" accept="image/*" style="display:none">
+
+<div class="modal-mask" id="dataModal">
+  <div class="modal">
+    <div class="modal-head">
+      <b>📝 内容 / AI 编辑</b>
+      <button id="dmClose" title="关闭">×</button>
+    </div>
+    <p class="modal-tip">下面是你简历的全部内容（JSON）。可整段复制给 AI 润色/重写，再把结果粘回来，点「应用并预览」看效果、「应用并保存」同步到所有设备。<b>只改文字，别动字段名和括号结构</b>；skills / 职责里可用 &lt;b&gt;词&lt;/b&gt; 加粗。</p>
+    <textarea id="dmText" spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button id="dmCopy">📋 复制给 AI（含说明）</button>
+      <button id="dmApply">👁 应用并预览</button>
+      <button id="dmSave" class="primary">☁️ 应用并保存到云端</button>
+    </div>
+    <div id="dmError" class="modal-error"></div>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script>
@@ -279,6 +312,60 @@
     toast('已下载 data.js，可上传到 GitHub 覆盖同名文件');
   });
   document.getElementById('btnSave').addEventListener('click', saveCloud);
+
+  // ===== 内容 / AI 编辑弹窗 =====
+  var modal = document.getElementById('dataModal');
+  var dmText = document.getElementById('dmText');
+  var dmError = document.getElementById('dmError');
+
+  function openData() { dmError.textContent = ''; dmText.value = JSON.stringify(current, null, 2); modal.classList.add('show'); }
+  function closeData() { modal.classList.remove('show'); }
+
+  function normalize(o) {
+    o.title = o.title || '简历'; o.name = o.name || ''; o.role = o.role || '';
+    ['basic', 'intent', 'work', 'skills', 'projects', 'education', 'summary'].forEach(function (k) { if (!Array.isArray(o[k])) o[k] = []; });
+    return o;
+  }
+  function parseData(text) {
+    var t = (text || '').trim();
+    var i = t.indexOf('{'), j = t.lastIndexOf('}');
+    if (i < 0 || j <= i) throw new Error('没找到内容，请粘贴完整的 { ... } 数据');
+    return normalize(JSON.parse(t.slice(i, j + 1)));
+  }
+  function tmpCopy(s) {
+    var ta = document.createElement('textarea'); ta.value = s; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('已复制，去粘给 AI 即可'); } catch (e) { toast('复制失败，请手动全选复制'); }
+    document.body.removeChild(ta);
+  }
+  function copyText(s) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(s).then(function () { toast('已复制，去粘给 AI 即可'); }).catch(function () { tmpCopy(s); });
+    } else tmpCopy(s);
+  }
+
+  document.getElementById('btnData').addEventListener('click', openData);
+  document.getElementById('dmClose').addEventListener('click', closeData);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeData(); });
+
+  document.getElementById('dmApply').addEventListener('click', function () {
+    try { current = parseData(dmText.value); render(current); closeData(); toast('已应用（还没保存，记得点「保存到云端」）'); }
+    catch (e) { dmError.textContent = '解析失败：' + e.message + '\n请检查 JSON 是否合法（引号、逗号、括号要配对；末尾多余逗号会报错）。'; }
+  });
+  document.getElementById('dmSave').addEventListener('click', function () {
+    try { current = parseData(dmText.value); render(current); }
+    catch (e) { dmError.textContent = '解析失败：' + e.message; return; }
+    closeData(); saveCloud();
+  });
+  document.getElementById('dmCopy').addEventListener('click', function () {
+    var p = '请帮我优化/重写下面这份 JSON 格式的简历内容。要求：\n'
+      + '1) 保持 JSON 结构和所有字段名不变；\n'
+      + '2) 只返回完整、合法的 JSON，不要任何解释文字，不要用 ```代码块``` 包裹；\n'
+      + '3) skills 和各 duties 里可用 <b>词</b> 给关键词加粗；\n'
+      + '4) 不要出现末尾多余逗号。\n\n当前内容：\n'
+      + JSON.stringify(current, null, 2);
+    copyText(p);
+  });
 
   function serialize(d) {
     return '/* 简历内容（由网页端“保存/下载”自动生成，可继续在网页或 GitHub 上编辑） */\n\nconst RESUME = ' + JSON.stringify(d, null, 2) + ';\n';

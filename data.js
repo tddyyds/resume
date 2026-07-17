@@ -3,11 +3,11 @@
 const RESUME = {
 
   /* 页面标题（浏览器标签页显示的名字） */
-  title: "简历 - FAE / 应用工程师（嵌入式 · IoT）",
+  title: "简历 - BLE/Mesh 蓝牙解决方案 / 嵌入式 FAE 工程师",
 
   /* 顶部：姓名 + 岗位 */
   name: "李 白",
-  role: "FAE / 应用工程师（嵌入式 · IoT 方向）",
+  role: "",
 
   /* 基本信息（左右两栏，值改成你的真实信息即可） */
   basic: [
@@ -81,7 +81,7 @@ const RESUME = {
     {
       name: "BLE Mesh 低功耗双键开关方案验证与厂商支持",
       date: "2025.10 ~ 至今",
-      tech: "RTL8762E、NuttX、Zephyr BLE Mesh、GATT、DLPS、OTA、MiBeacon、WSL + ARM GCC 交叉编译",
+      tech: "RTL8762E、Zephyr BLE Mesh、NuttX、GATT、DLPS 低功耗、OTA、交叉编译（WSL + ARM GCC）",
       desc: "验证 MHCB12G 模组在低功耗场景下开关产品的完整功能，基于 RTL8762E + NuttX + Zephyr BLE Mesh 架构，覆盖配网、控制、上报、OTA、恢复出厂全链路，形成可供厂商复用的开发参考方案。",
       duties: [
         "<b>环境与构建：</b>搭建 RTL8762E 交叉编译环境（WSL + ARM GCC + NuttX），解决静态库 libzblue.a 符号冲突（定位冲突 .o 文件、重构 Makefile 链接顺序），输出环境配置指南；",
@@ -93,7 +93,7 @@ const RESUME = {
     {
       name: "室外菌落作物生长环境监测系统",
       date: "2025.02 ~ 2025.07",
-      tech: "STM32F103C8T6、OV7670 摄像头、CC2530 ZigBee、BC28 NB-IoT、SHT30、BH1750、DS3231M、W25Q64、I2C/SPI/UART、TCP、Base64、CRC、FreeRTOS",
+      tech: "STM32、OV7670、ZigBee（CC2530）、NB-IoT（BC28）、FreeRTOS、I2C/SPI/UART、TCP、CRC 校验",
       desc: "面向微生物科研 / 农业场景的室外环境监测系统，采用主从机协同架构，实现生长环境参数与图像的采集、无线传输及远程监控。主机采集温湿度、光照，从机搭载摄像头获取菌落图像，经 ZigBee 整合后由主机通过 NB-IoT（BC28）经 TCP 上传服务器，搭载 7.4V 18650 锂电池满足野外 15-30 天续航与数据零丢失要求。",
       duties: [
         "<b>主机控制端：</b>引入 FreeRTOS 创建数据采集、ZigBee 通信、NB-IoT 传输等多任务并行调度；实现 I2C 驱动，按 SHT30 时序采集温湿度并按手册公式换算，CRC8 校验保障数据完整性；",
@@ -105,7 +105,7 @@ const RESUME = {
     {
       name: "基于 RK3568 边缘计算与 STM32 的工业级智能监控平台",
       date: "2023.06 ~ 2024.08",
-      tech: "C/C++、FreeRTOS、UART、LoRa、NB-IoT、I2C/SPI/ADC、Qt、SQLServer、MQTT、HTTP/HTTPS、Linux 4.19 内核",
+      tech: "RK3568、STM32、嵌入式 Linux（内核裁剪 / 交叉编译）、FreeRTOS、LoRa、NB-IoT、Qt、MQTT",
       desc: "由 STM32F103ZET6 采集终端、RK3568 主服务器及远程 Web 监控终端组成，面向工业生产现场设备状态与环境监控。RK3568 搭载定制 Linux 统一管控设备并集中处理、存储、分发数据；STM32 采集温度、压力、振动等参数经 LoRa / NB-IoT 上传；Web 端支持实时监控、远程控制、历史查询与异常告警。",
       duties: [
         "<b>STM32 采集终端：</b>硬件电路设计与固件开发，移植 FreeRTOS 配置多任务调度；通过 UART/I2C/SPI/ADC 编写传感器驱动；编写 LoRa 近距离通信与 NB-IoT 驱动，调用 HTTP/HTTPS 完成数据上传；",

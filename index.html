@@ -79,6 +79,8 @@
   .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
   .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
   .toolbar button.primary:hover { background: var(--accent-dark); color: #fff; }
+  .toolbar select { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 6px 10px; border-radius: 6px; font-size: 13px; cursor: pointer; max-width: 200px; }
+  .toolbar select:hover { border-color: var(--accent); color: var(--accent); }
   .load-error { max-width: 600px; margin: 40px auto; padding: 20px; background: #fff3f3; border: 1px solid #ffcccc; border-radius: 8px; color: #b00; }
   .edit-tip { position: fixed; top: 52px; left: 0; right: 0; z-index: 998; background: var(--accent-dark); color: #fff; text-align: center; padding: 6px 12px; font-size: 12px; display: none; }
   body.editing { padding-top: 84px; }
@@ -127,6 +129,10 @@
 
 <div class="toolbar">
   <span class="brand">📄 我的简历</span>
+  <select id="verSelect" title="选择简历版本"></select>
+  <button id="btnVerAdd" style="display:none">＋ 新版本</button>
+  <button id="btnVerRename" style="display:none">✎ 重命名</button>
+  <button id="btnVerDel" style="display:none">🗑 删除版本</button>
   <button id="btnEdit">✏️ 逐项编辑</button>
   <button id="btnData">📝 内容/AI 编辑</button>
   <button id="btnSave" class="primary" style="display:none">☁️ 保存到云端</button>
@@ -166,7 +172,10 @@
 
   var resumeEl = document.getElementById('resume');
   var editing = false;
-  var original = null, current = null;
+  var current = null;              // 当前正在预览/编辑的版本内容
+  var versions = [];               // [{ id, label, data }]
+  var activeIdx = 0;               // 当前选中的版本下标
+  var originalVersions = null;     // 全量快照，用于「取消」还原
 
   function esc(s) { return String(s == null ? '' : s); }
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
@@ -303,6 +312,9 @@
     document.getElementById('btnSave').style.display = on ? '' : 'none';
     document.getElementById('btnDownload').style.display = on ? '' : 'none';
     document.getElementById('btnCancel').style.display = on ? '' : 'none';
+    document.getElementById('btnVerAdd').style.display = on ? '' : 'none';
+    document.getElementById('btnVerRename').style.display = on ? '' : 'none';
+    document.getElementById('btnVerDel').style.display = on ? '' : 'none';
     var be = document.getElementById('btnEdit');
     be.textContent = on ? '✏️ 编辑中' : '✏️ 编辑';
     be.classList.toggle('primary', on);
@@ -311,11 +323,68 @@
   function enterEdit() { editing = true; document.body.classList.add('editing'); toggleBtns(true); setEditable(true); }
   function exitEdit() { editing = false; document.body.classList.remove('editing'); toggleBtns(false); setEditable(false); }
 
+  // ===== 多版本管理 =====
+  function syncCurrent() { if (versions[activeIdx]) versions[activeIdx].data = clone(current); }
+
+  function renderVersionSelect() {
+    var sel = document.getElementById('verSelect');
+    sel.innerHTML = versions.map(function (v, i) {
+      return '<option value="' + i + '"' + (i === activeIdx ? ' selected' : '') + '>' + esc(v.label) + '</option>';
+    }).join('');
+  }
+
+  function switchVersion(idx) {
+    if (idx === activeIdx || !versions[idx]) { renderVersionSelect(); return; }
+    syncCurrent();                       // 先把当前编辑内容存回内存
+    activeIdx = idx;
+    current = clone(versions[activeIdx].data);
+    renderVersionSelect();
+    render(current);
+  }
+
+  document.getElementById('verSelect').addEventListener('change', function () { switchVersion(Number(this.value)); });
+
+  document.getElementById('btnVerAdd').addEventListener('click', function () {
+    var name = prompt('新版本名称：', '新版本');
+    if (name === null) return;
+    syncCurrent();
+    var copy = clone(versions[activeIdx].data);
+    versions.push({ id: 'v' + Date.now(), label: (name.trim() || ('版本' + (versions.length + 1))), data: copy });
+    activeIdx = versions.length - 1;
+    current = clone(copy);
+    renderVersionSelect(); render(current);
+    toast('已新增版本（基于当前版本复制），改完记得「保存到云端」');
+  });
+
+  document.getElementById('btnVerRename').addEventListener('click', function () {
+    var name = prompt('重命名当前版本：', versions[activeIdx].label);
+    if (name === null) return;
+    versions[activeIdx].label = name.trim() || versions[activeIdx].label;
+    renderVersionSelect();
+    toast('已重命名，记得「保存到云端」');
+  });
+
+  document.getElementById('btnVerDel').addEventListener('click', function () {
+    if (versions.length <= 1) { alert('至少保留一个版本，无法删除。'); return; }
+    if (!confirm('确定删除版本「' + versions[activeIdx].label + '」？保存到云端后生效。')) return;
+    versions.splice(activeIdx, 1);
+    if (activeIdx >= versions.length) activeIdx = versions.length - 1;
+    current = clone(versions[activeIdx].data);
+    renderVersionSelect(); render(current);
+    toast('已删除该版本，记得「保存到云端」');
+  });
+
   document.getElementById('btnEdit').addEventListener('click', function () { if (editing) { exitEdit(); } else { enterEdit(); } });
-  document.getElementById('btnCancel').addEventListener('click', function () { current = clone(original); exitEdit(); render(current); });
+  document.getElementById('btnCancel').addEventListener('click', function () {
+    versions = clone(originalVersions);
+    if (activeIdx >= versions.length) activeIdx = 0;
+    current = clone(versions[activeIdx].data);
+    renderVersionSelect(); exitEdit(); render(current);
+  });
   document.getElementById('btnPdf').addEventListener('click', function () { window.print(); });
   document.getElementById('btnDownload').addEventListener('click', function () {
-    var blob = new Blob([serialize(current)], { type: 'text/javascript;charset=utf-8' });
+    syncCurrent();
+    var blob = new Blob([serialize()], { type: 'text/javascript;charset=utf-8' });
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'data.js'; a.click(); URL.revokeObjectURL(a.href);
     toast('已下载 data.js，可上传到 GitHub 覆盖同名文件');
   });
@@ -375,8 +444,9 @@
     copyText(p);
   });
 
-  function serialize(d) {
-    return '/* 简历内容（由网页端“保存/下载”自动生成，可继续在网页或 GitHub 上编辑） */\n\nconst RESUME = ' + JSON.stringify(d, null, 2) + ';\n';
+  function serialize() {
+    return '/* 简历内容（多版本，由网页端“保存/下载”自动生成，可继续在网页或 GitHub 上编辑） */\n\n'
+      + 'const RESUME_DATA = ' + JSON.stringify({ versions: versions }, null, 2) + ';\n';
   }
   function b64(str) { return btoa(unescape(encodeURIComponent(str))); }
 
@@ -388,7 +458,8 @@
       token = token.trim();
       localStorage.setItem(TOKEN_KEY, token);
     }
-    var text = serialize(current);
+    syncCurrent();
+    var text = serialize();
     var base = 'https://api.github.com/repos/' + GH.owner + '/' + GH.repo + '/contents/' + GH.path;
     var headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
     toast('正在保存…');
@@ -403,7 +474,7 @@
         return fetch(base, { method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, headers), body: JSON.stringify(body) });
       })
       .then(function (r) { return r.ok ? r.json() : r.json().then(function (e) { throw new Error(e.message || ('HTTP ' + r.status)); }); })
-      .then(function () { original = clone(current); exitEdit(); toast('✅ 已保存到云端，约 1 分钟后所有设备生效'); })
+      .then(function () { syncCurrent(); originalVersions = clone(versions); exitEdit(); toast('✅ 已保存到云端，约 1 分钟后所有设备生效'); })
       .catch(function (err) { alert('保存失败：' + err.message + '\n\n可改用「下载 data.js」，再到 github.com 上传覆盖同名文件。'); });
   }
 
@@ -415,11 +486,27 @@
     setTimeout(function () { t.remove(); }, 2200);
   }
 
-  if (typeof RESUME === 'undefined') {
+  // 读取版本数据：优先新版多版本格式（RESUME_DATA），兼容旧版单份格式（RESUME）
+  function loadVersions() {
+    if (typeof RESUME_DATA !== 'undefined' && RESUME_DATA && Array.isArray(RESUME_DATA.versions) && RESUME_DATA.versions.length) {
+      return RESUME_DATA.versions.map(function (v, i) {
+        return { id: v.id || ('v' + i), label: v.label || ('版本' + (i + 1)), data: normalize(clone(v.data || {})) };
+      });
+    }
+    if (typeof RESUME !== 'undefined') {
+      return [{ id: 'default', label: '默认版本', data: normalize(clone(RESUME)) }];
+    }
+    return null;
+  }
+
+  versions = loadVersions();
+  if (!versions) {
     resumeEl.innerHTML = '<div class="load-error">没读到简历内容（data.js）。请确认 data.js 与 index.html 在同一目录。</div>';
   } else {
-    original = clone(RESUME);
-    current = clone(RESUME);
+    activeIdx = 0;
+    originalVersions = clone(versions);
+    current = clone(versions[activeIdx].data);
+    renderVersionSelect();
     try { render(current); }
     catch (e) { resumeEl.innerHTML = '<div class="load-error">渲染出错：' + esc(e.message) + '</div>'; }
   }

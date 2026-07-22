@@ -42,7 +42,7 @@ const RESUME_DATA = {
         "intent": [
           {
             "k": "期望岗位",
-            "v": "FAE · 应用工程师 · 解决方案工程师"
+            "v": "嵌入式· FAE&nbsp;&nbsp;· 解决方案工程师"
           },
           {
             "k": "到岗时间",

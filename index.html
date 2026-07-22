@@ -75,6 +75,8 @@
     padding: 8px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(6px); box-shadow: 0 2px 10px rgba(0,0,0,.1); font-size: 13px;
   }
   .toolbar .brand { font-weight: 700; color: var(--accent-dark); margin-right: auto; }
+  .toolbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .menu-toggle { display: none; border: 1px solid var(--line); background: #fff; color: var(--ink); font-size: 18px; line-height: 1; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
   .toolbar button { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all .15s; }
   .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
   .toolbar button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -112,8 +114,39 @@
   /* 窄屏 / 手机：缩小内边距与标题，避免横向溢出（不影响 A4 打印） */
   @media screen and (max-width: 820px) {
     .page { padding: 24px 18px; margin: 8px auto; min-height: auto; }
-    .header .name { font-size: 26px; }
-    .header .contact { max-width: none; }
+    .header { gap: 12px 20px; }
+    .header .name { font-size: 24px; }
+    .header .contact { max-width: none; grid-template-columns: 1fr; gap: 5px; }
+    .header .contact span.kv { white-space: normal; }
+    .intent .chip .v { white-space: normal; }
+    .item-head .date, .edu-row .date { white-space: normal; }
+  }
+
+  /* 手机端：把工具栏收进汉堡菜单，放大可点区域 */
+  @media screen and (max-width: 680px) {
+    .toolbar { flex-wrap: wrap; padding: 8px 12px; gap: 6px; }
+    .menu-toggle { display: inline-block; }
+    .toolbar-actions {
+      display: none; flex-basis: 100%; width: 100%; flex-direction: column; align-items: stretch;
+      gap: 6px; margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--line);
+      max-height: 70vh; overflow-y: auto;
+    }
+    .toolbar.menu-open .toolbar-actions { display: flex; }
+    .toolbar-actions button, .toolbar-actions select { width: 100%; padding: 11px 14px; font-size: 15px; max-width: none; }
+    body { padding-top: 56px; }
+    body.editing { padding-top: 56px; }
+    .edit-tip { top: 56px; font-size: 12px; line-height: 1.5; }
+
+    /* 编辑控件放大，方便手指点按 */
+    body.editing .li-ctrl button, body.editing .add-btn { width: 30px; height: 30px; font-size: 18px; }
+    body.editing .add-btn { width: auto; padding: 6px 14px; height: auto; font-size: 13px; }
+    body.editing [data-bind] { min-width: 24px; }
+
+    /* 弹窗全屏化，输入框自动换行 */
+    .modal-mask { padding: 0; align-items: stretch; }
+    .modal { width: 100%; max-height: 100vh; height: 100vh; border-radius: 0; }
+    .modal textarea { white-space: pre-wrap; word-break: break-word; min-height: 200px; font-size: 13px; }
+    .modal-actions button { flex: 1 1 auto; padding: 11px 12px; font-size: 14px; }
   }
   @media print {
     body { background: #fff; padding-top: 0; }
@@ -127,18 +160,21 @@
 </head>
 <body>
 
-<div class="toolbar">
+<div class="toolbar" id="toolbar">
   <span class="brand">📄 我的简历</span>
-  <select id="verSelect" title="选择简历版本"></select>
-  <button id="btnVerAdd" style="display:none">＋ 新版本</button>
-  <button id="btnVerRename" style="display:none">✎ 重命名</button>
-  <button id="btnVerDel" style="display:none">🗑 删除版本</button>
-  <button id="btnEdit">✏️ 逐项编辑</button>
-  <button id="btnData">📝 内容/AI 编辑</button>
-  <button id="btnSave" class="primary" style="display:none">☁️ 保存到云端</button>
-  <button id="btnDownload" style="display:none">⬇️ 下载 data.js</button>
-  <button id="btnCancel" style="display:none">取消</button>
-  <button id="btnPdf">⬇️ 导出 PDF</button>
+  <button class="menu-toggle" id="menuToggle" title="菜单" aria-label="菜单" aria-expanded="false">☰</button>
+  <div class="toolbar-actions" id="toolbarActions">
+    <select id="verSelect" title="选择简历版本"></select>
+    <button id="btnVerAdd" style="display:none">＋ 新版本</button>
+    <button id="btnVerRename" style="display:none">✎ 重命名</button>
+    <button id="btnVerDel" style="display:none">🗑 删除版本</button>
+    <button id="btnEdit">✏️ 逐项编辑</button>
+    <button id="btnData">📝 内容/AI 编辑</button>
+    <button id="btnSave" class="primary" style="display:none">☁️ 保存到云端</button>
+    <button id="btnDownload" style="display:none">⬇️ 下载 data.js</button>
+    <button id="btnCancel" style="display:none">取消</button>
+    <button id="btnPdf">⬇️ 导出 PDF</button>
+  </div>
 </div>
 <div class="edit-tip" id="editTip">编辑模式：点文字直接改；列表项旁 ＋/× 可增删。改完点「保存到云端」同步到所有设备（或「下载 data.js」手动上传）。</div>
 
@@ -171,6 +207,22 @@
   var GH = { owner: 'tddyyds', repo: 'resume', path: 'data.js', branch: 'master' };
 
   var resumeEl = document.getElementById('resume');
+
+  // ===== 手机端汉堡菜单 =====
+  var toolbarEl = document.getElementById('toolbar');
+  var menuToggle = document.getElementById('menuToggle');
+  var toolbarActions = document.getElementById('toolbarActions');
+  function isMobileMenu() { return window.matchMedia('(max-width: 680px)').matches; }
+  function closeMenu() { toolbarEl.classList.remove('menu-open'); menuToggle.setAttribute('aria-expanded', 'false'); }
+  menuToggle.addEventListener('click', function () {
+    var open = toolbarEl.classList.toggle('menu-open');
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  // 点菜单里的按钮后自动收起（select 除外，方便连续切换版本）
+  toolbarActions.addEventListener('click', function (e) {
+    if (isMobileMenu() && e.target.closest('button')) closeMenu();
+  });
+
   var editing = false;
   var current = null;              // 当前正在预览/编辑的版本内容
   var versions = [];               // [{ id, label, data }]
